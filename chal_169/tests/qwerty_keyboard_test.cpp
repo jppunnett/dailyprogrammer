@@ -1,6 +1,8 @@
+// qwerty_keyboard_test.cpp
+// Build using: g++ -ggdb -std=c++0x -Wall -o qk_test qwerty_keyboard_test.cpp -lboost_unit_test_framework
 // #include <boost/test/unit_test.hpp>
 #include <boost/test/minimal.hpp>
-#include "qwerty_keyboard.h"
+#include "../qwerty_keyboard.h"
 
 int test_main(int, char *[]) {
 
