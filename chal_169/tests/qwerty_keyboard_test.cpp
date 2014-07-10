@@ -1,10 +1,10 @@
 // qwerty_keyboard_test.cpp
 // Build using: g++ -ggdb -std=c++0x -Wall -o qk_test qwerty_keyboard_test.cpp -lboost_unit_test_framework
-// #include <boost/test/unit_test.hpp>
-#include <boost/test/minimal.hpp>
 #include "../qwerty_keyboard.h"
+#define BOOST_TEST_MODULE Qwerty_keyboard_Test
+#include <boost/test/unit_test.hpp>
 
-int test_main(int, char *[]) {
+BOOST_AUTO_TEST_CASE(kb_test) {
 
     Qwerty_keyboard kb;
     
@@ -29,6 +29,4 @@ int test_main(int, char *[]) {
 
     //  Should throw exception.
     BOOST_CHECK_THROW(kb.letter_at_offset_from(1, '/'), std::runtime_error);
-
-    return 0;
 }
