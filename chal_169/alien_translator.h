@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <set>
+#include <map>
 #include <iterator>
 #include <fstream>
 #include <boost/algorithm/string.hpp>
@@ -23,6 +24,24 @@ public:
 
         for(; word_iter != end_iter; ++word_iter)
             dict_.insert(*word_iter);
+
+        const std::string rows[] = {"qwertyuiop", "asdfghjkl", "zxcvbnm",
+                                    "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"};
+        std::string keys;
+        for(const auto &r : rows) keys += r;
+
+        for(auto i : {-2, -1, 1, 2}) {
+            std::string shifted;
+            for(const auto &r : rows) {
+                size_t pos = i < 0 ? r.size() - (i * -1): i;
+                shifted += r.substr(pos) + r.substr(0, pos);
+            }
+            
+            std::cout  << shifted << std::endl;
+
+            // fixes_.push_back(make_trans(keys, shifted));
+        }
+
     }
 
     ~Alien_translator() {}
@@ -72,6 +91,7 @@ private:
 
 private:
     std::set<std::string> dict_;
+    std::vector<std::map<char, char> > fixes_;
     Qwerty_keyboard keyboard;
 };
 
