@@ -47,26 +47,7 @@ public:
 
 private:
     bool is_in_dict(const std::string& word) {
-
-        //  Go to top of dictionary file.
-        // english_dict_.seekg(0, std::ios_base::beg);
-
-        // std::istream_iterator<std::string> word_iter(english_dict_);
-        // std::istream_iterator<std::string> end_iter;
-
-        // for(; word_iter != end_iter; ++word_iter) {
-            // if(boost::iequals(*word_iter, word)) {
-                // return true;
-            // }
-        // }
-
-        //  Word not found so we are at end-of-file. We have to clear the error
-        //  flags.
-        // english_dict_.clear();
-        // return false;
-
-        auto iter = dict_.find(word);
-        return iter != dict_.end();
+        return dict_.find(word) != dict_.end();
     }
 
     std::vector<std::string> generate_possibilities(const std::string& gooblygook) {
