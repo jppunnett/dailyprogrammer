@@ -8,7 +8,6 @@
 #include <map>
 #include <iterator>
 #include <fstream>
-#include <boost/algorithm/string.hpp>
 
 class Alien_translator
 {
