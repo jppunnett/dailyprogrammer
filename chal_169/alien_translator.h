@@ -10,18 +10,15 @@
 #include <fstream>
 #include <boost/algorithm/string.hpp>
 
-#include "qwerty_keyboard.h"
-
 class Alien_translator
 {
 public:
     Alien_translator() {
-
+        // Build an in-memory list of words in dictionary. This is faster than
+        //  looking up the word using File IO.
         std::ifstream english_dict("brit-a-z.txt");
-
         std::istream_iterator<std::string> word_iter(english_dict);
         std::istream_iterator<std::string> end_iter;
-
         for(; word_iter != end_iter; ++word_iter)
             dict_.insert(*word_iter);
 
@@ -37,24 +34,19 @@ public:
                 shifted += r.substr(pos) + r.substr(0, pos);
             }
             
-            std::cout  << shifted << std::endl;
-
-            // fixes_.push_back(make_trans(keys, shifted));
+            fixes_.push_back(make_trans(keys, shifted));
         }
-
     }
 
     ~Alien_translator() {}
 
     std::vector<std::string> guess(const std::string& gooblygook) {
-        
+        auto alternatives = get_alternatives(gooblygook);
+
         std::vector<std::string> guesses;
-        
-        auto possibilities = generate_possibilities(gooblygook);
-        for(auto p : possibilities) {
-            if(is_in_dict(p))
-                guesses.push_back(p);
-        }
+        for(auto alt : alternatives)
+            if(is_in_dict(alt))
+                guesses.push_back(alt);
 
         return guesses;
     }
@@ -69,30 +61,38 @@ private:
         return dict_.find(word) != dict_.end();
     }
 
-    std::vector<std::string> generate_possibilities(const std::string& gooblygook) {
-        
-        std::vector<std::string> possibilities;
-        possibilities.push_back(get_alternate_spelling(gooblygook, -1));        
-        possibilities.push_back(get_alternate_spelling(gooblygook, -2));        
-        possibilities.push_back(get_alternate_spelling(gooblygook,  1));        
-        possibilities.push_back(get_alternate_spelling(gooblygook,  2));        
-
-        return possibilities;
+    std::vector<std::string> 
+    get_alternatives(const std::string& gooblygook) {
+        std::vector<std::string> alternatives;
+        for(const auto& f : fixes_)
+            alternatives.push_back(translate(gooblygook, f));
+        return alternatives;
     }
 
-    std::string get_alternate_spelling(const std::string& gooblygook, int offset) {
-        std::string alternate = "";
-        for(char c : gooblygook)
-            alternate += keyboard.letter_at_offset_from(offset, c);
+    std::map<char, char>
+    make_trans(const std::string& keys, const std::string& shifted) {
+        if(keys.size() != shifted.size())
+            throw std::runtime_error("keys.size() != shifted.size()");
 
-        return alternate;
+        std::map<char, char> trans_table;
+        for(size_t i = 0; i < shifted.size(); ++i)
+            trans_table.insert(std::pair<char,char>(keys[i],shifted[i]));
+
+        return trans_table;
+    }
+
+    std::string translate(const std::string& gooblygook, 
+                          const std::map<char, char>& trans_table) {
+        std::string translated;
+        for(auto c : gooblygook)
+            translated += trans_table.at(c);
+        return translated;
     }
 
 
 private:
     std::set<std::string> dict_;
     std::vector<std::map<char, char> > fixes_;
-    Qwerty_keyboard keyboard;
 };
 
 #endif  //  ALIEN_TRANSLATOR_H
