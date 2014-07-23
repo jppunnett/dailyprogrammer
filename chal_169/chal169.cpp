@@ -1,8 +1,8 @@
 // http://redd.it/29od55
 // Challenge 169-Intermediate - Home-row Spell Check
-// Usage: aliensp
+// Usage: alien_trans
 //    Spell check and correct alien input.
-//    aliensp < file.in
+//    alien_trans < file.in
 // Built using g++: g++ -std=c++0x -Wall -o alien_trans chal169.cpp
 //
 #include <iostream>
