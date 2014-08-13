@@ -1,4 +1,4 @@
-"""Generates a The Thue-Morse sequence is a binary sequence that never repeats."""
+"""Generates the Thue-Morse sequence, a binary sequence that never repeats."""
 
 import sys
 
